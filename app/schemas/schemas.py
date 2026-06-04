@@ -7,6 +7,7 @@ class UserCreate(BaseModel):
 class UserResponse(BaseModel):
     id: int
     username: str
+    role:str
 
     class Config:
         from_attributes=True
@@ -26,8 +27,12 @@ class BookResponse(BaseModel):
     class Config:
         from_attributes=True
 
+class BookUpdate(BaseModel):
+    title: str | None = None
+    author : str | None = None
+    published_year : int | None = None 
+
 class BorrowCreate(BaseModel):
-    user_id:int
     book_id:int
 
 class BorrowResponse(BaseModel):
@@ -38,3 +43,15 @@ class BorrowResponse(BaseModel):
     model_config={
         "from_attributes":True
     }
+
+class ReturnCreate(BaseModel):
+    book_id:int
+
+class ReturnResponse(BaseModel):
+    id:int
+    user_id:int
+    book_id:int
+    borrowed_at:datetime
+    returned_at:datetime | None
+    model_config={"from_attributes":True}
+    
