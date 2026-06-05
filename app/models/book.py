@@ -8,4 +8,4 @@ class Book(Base):
     author: Mapped[str]
     published_year:Mapped[int]
     available: Mapped[bool]=mapped_column(default=True)
-    
+    description: Mapped[str | None] = mapped_column(nullable=True)

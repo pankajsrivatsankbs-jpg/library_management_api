@@ -17,6 +17,9 @@ async def create_user(user:UserCreate,db:AsyncSession=Depends(get_db)):
     await db.commit()
     await db.refresh(db_user)
     return db_user
+@router.get("/me",response_model=UserResponse)
+async def get_me(current_user:User=Depends(get_current_user)):
+    return current_user
 
 @router.get("/{user_id}",response_model=UserResponse)
 async def get_user(user_id:int, db:AsyncSession=Depends(get_db)):
@@ -28,6 +31,4 @@ async def get_user(user_id:int, db:AsyncSession=Depends(get_db)):
     return user
 
 
-@router.get("/me",response_model=UserResponse)
-async def get_me(current_user:User=Depends(get_current_user)):
-    return current_user
+

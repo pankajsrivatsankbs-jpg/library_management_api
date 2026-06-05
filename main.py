@@ -17,19 +17,20 @@ from app.routes.admin_routes import router as admin_router
 
 app = FastAPI()
 
+
+print(Base.metadata.tables.keys())
+
+@asynccontextmanager
+async def lifespan(app:FastAPI):
+        yield
+
+app=FastAPI(lifespan= lifespan)
+app.include_router(user_router)
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(book_router)
 app.include_router(borrow_router)
 app.include_router(admin_router)
 
-print(Base.metadata.tables.keys())
-
-@asynccontextmanager
-async def lifespan(app:FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    yield
-
-app=FastAPI(lifespan= lifespan)
-app.include_router(user_router)
+for route in app.routes:
+    print(route.path)

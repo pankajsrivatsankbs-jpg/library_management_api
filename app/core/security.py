@@ -26,7 +26,7 @@ def create_access_token(data:dict):
     return encoded_jwt
 
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="/users/login"
+    tokenUrl="/auth/login"
 )
 
 async def get_current_user(

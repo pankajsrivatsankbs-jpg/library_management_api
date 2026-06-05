@@ -13,7 +13,6 @@ class UserResponse(BaseModel):
         from_attributes=True
 
 class BookCreate(BaseModel):
-    id:int
     title:str
     author:str
     available:bool
