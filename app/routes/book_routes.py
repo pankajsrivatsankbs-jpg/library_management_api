@@ -9,6 +9,8 @@ from app.models.book import Book
 from sqlalchemy import select
 from fastapi import HTTPException
 from app.core.security import require_admin
+from typing import Optional
+from fastapi import Query
 
 @router.post("/",response_model=BookResponse)
 async def create_book(book:BookCreate,current_admin:User=Depends(require_admin),db:AsyncSession=Depends(get_db)):
@@ -43,6 +45,7 @@ async def update_book(book_id:int,book_update:BookUpdate,current_admin:User=Depe
     book=result.scalar_one_or_none()
     if book is None:
         raise HTTPException(status_code=404, detail="book not found")
+    
     if book_update.title is not None:
         book.title = book_update.title
         
@@ -55,3 +58,33 @@ async def update_book(book_id:int,book_update:BookUpdate,current_admin:User=Depe
     await db.commit()
     await db.refresh(book)
     return book 
+
+@router.get("/",response_model=list[BookResponse])
+async def get_books(db:AsyncSession=Depends(get_db), limit:int=Query(default=10, ge=1,le=100),offset:int=Query(default=0,ge=0),available:Optional[bool]=None):
+    stmt= select(Book)
+    if available is not None:
+        stmt=stmt.where(Book.available == available)
+    stmt=stmt.limit(limit).offset(offset)
+    result=await db.execute(stmt)
+    books=result.scalars().all()
+    return books 
+
+
+
+@router.get("/", response_model=list[BookResponse])
+async def get_books(
+    available: Optional[bool] = None,
+    limit: int = Query(default=10, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(Book)
+
+    if available is not None:
+        stmt = stmt.where(Book.available == available)
+
+    stmt = stmt.limit(limit).offset(offset)
+
+    result = await db.execute(stmt)
+
+    return result.scalars().all()

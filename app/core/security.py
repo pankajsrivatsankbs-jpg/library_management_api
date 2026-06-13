@@ -1,7 +1,7 @@
 from passlib.context import CryptContext
 from jose import jwt,JWTError
 from datetime import datetime, timedelta
-from app.core.config import SECRET_KEY,ALGORITHM,ACCESS_TOKEN_EXPIRE_MINUTES
+from app.core.config import settings
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
@@ -20,9 +20,9 @@ def verify_password(entered_password:str,stored_hash:str)->bool:
 
 def create_access_token(data:dict):
     to_encode=data.copy()
-    expire=datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire=datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode["exp"]=expire
-    encoded_jwt=jwt.encode(to_encode,SECRET_KEY,algorithm=ALGORITHM)
+    encoded_jwt=jwt.encode(to_encode,settings.SECRET_KEY,algorithm=settings.ALGORITHM)
     return encoded_jwt
 
 oauth2_scheme = OAuth2PasswordBearer(
@@ -37,8 +37,8 @@ async def get_current_user(
     try:
         payload = jwt.decode(
             token,
-            SECRET_KEY,
-            algorithms=[ALGORITHM]
+            settings.SECRET_KEY,
+            algorithms=[settings.ALGORITHM]
         )
 
         user_id = payload.get("sub")#it returns the value of the "sub claim in string format"

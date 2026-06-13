@@ -15,3 +15,4 @@ async def get_all_borrows(current_user:User=Depends(require_admin),db:AsyncSessi
     result=await db.execute(stmt)
     records=result.scalars().all()
     return records
+

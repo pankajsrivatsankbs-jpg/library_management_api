@@ -22,6 +22,11 @@ async def borrow_book(borrow:BorrowCreate,current_user:User=Depends(get_current_
     if not book.available:
         raise HTTPException(status_code=409,detail="book is not available")
     new_record=BorrowRecord(user_id=current_user.id, book_id=borrow.book_id)
+    stmt = (
+        select(Book)
+        .where(Book.id == borrow.book_id)
+        .with_for_update()
+    )
     book.available=False
     db.add(new_record)
     await db.commit()
