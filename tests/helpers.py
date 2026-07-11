@@ -5,7 +5,7 @@ import psycopg2
 BASE_URL = "http://localhost:8000"
 PASSWORD = "pytestpass123"
 
-SYNC_DATABASE_URL = "postgresql://postgres:postgres123@db:5432/library_db1"
+SYNC_DATABASE_URL = "postgresql://postgres:postgres123@localhost:5432/library_db1"
 
 
 def unique_username(prefix: str = "pytest_user"):

@@ -94,5 +94,4 @@ def test_available_true_filter():
 
     assert isinstance(books, list)
 
-    for book in books:
-        assert book["available"] is True
+    assert all(book["available"] for book in books)

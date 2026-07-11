@@ -7,6 +7,9 @@ from app.routes.borrow_routes import router as borrow_router
 from app.routes.admin_routes import router as admin_router
 
 app = FastAPI()
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
 
 
 print(Base.metadata.tables.keys())

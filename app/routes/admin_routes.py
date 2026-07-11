@@ -10,7 +10,7 @@ from sqlalchemy import select
 from app.core.security import require_admin
 
 @router.get("/borrows",response_model=list[BorrowResponse])
-async def get_all_borrows(current_user:User=Depends(require_admin),db:AsyncSession=Depends(get_db)):
+async def get_all_borrows(current_admin:User=Depends(require_admin),db:AsyncSession=Depends(get_db)):
     stmt=select(BorrowRecord)
     result=await db.execute(stmt)
     records=result.scalars().all()

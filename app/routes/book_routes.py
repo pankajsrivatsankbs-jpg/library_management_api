@@ -20,12 +20,6 @@ async def create_book(book:BookCreate,current_admin:User=Depends(require_admin),
     await db.refresh(new_book)
     return new_book
 
-@router.get("/",response_model=list[BookResponse])
-async def get_book(db:AsyncSession=Depends(get_db)):
-    stmt=select(Book)
-    result=await db.execute(stmt)
-    books=result.scalars().all()
-    return books
 
 @router.delete("/{book_id}")
 async def delete_book(book_id:int, current_admin:User=Depends(require_admin),db:AsyncSession=Depends(get_db)):
@@ -66,25 +60,11 @@ async def get_books(db:AsyncSession=Depends(get_db), limit:int=Query(default=10,
         stmt=stmt.where(Book.available == available)
     stmt=stmt.limit(limit).offset(offset)
     result=await db.execute(stmt)
+    print(stmt)
     books=result.scalars().all()
-    return books 
+    print("available =", available, type(available))
+    return books
+    
 
 
 
-@router.get("/", response_model=list[BookResponse])
-async def get_books(
-    available: Optional[bool] = None,
-    limit: int = Query(default=10, ge=1, le=100),
-    offset: int = Query(default=0, ge=0),
-    db: AsyncSession = Depends(get_db)
-):
-    stmt = select(Book)
-
-    if available is not None:
-        stmt = stmt.where(Book.available == available)
-
-    stmt = stmt.limit(limit).offset(offset)
-
-    result = await db.execute(stmt)
-
-    return result.scalars().all()

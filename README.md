@@ -42,6 +42,7 @@ This project simulates a library management backend where users can register, lo
 * Docker
 * Docker Compose
 * Uvicorn
+* pytest
 
 ## Project Structure
 

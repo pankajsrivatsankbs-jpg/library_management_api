@@ -5,3 +5,6 @@ __pycache__/
 *.pyc
 .vscode/
 .idea/
+html.cov/
+.coverage
+.pytest_cache/
