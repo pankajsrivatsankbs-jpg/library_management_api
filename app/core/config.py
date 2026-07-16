@@ -12,3 +12,11 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+# Convert Railway's URL to an async SQLAlchemy URL
+if settings.DATABASE_URL.startswith("postgresql://"):
+    settings.DATABASE_URL = settings.DATABASE_URL.replace(
+        "postgresql://",
+        "postgresql+asyncpg://",
+        1,
+    )
