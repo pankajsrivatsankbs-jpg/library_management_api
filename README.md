@@ -465,3 +465,11 @@ This project was built to strengthen practical backend development skills, inclu
 - Docker Compose workflows
 - Backend testing with Pytest
 - Debugging real-world integration issues
+
+## Live Demo
+
+API:
+https://librarymanagementapi-production-3b74.up.railway.app
+
+Swagger UI:
+https://librarymanagementapi-production-3b74.up.railway.app/docs
