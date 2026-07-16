@@ -11,8 +11,14 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 from app.db.database import Base
 from app.core.config import settings
 import app.models
+from app.core.config import settings
+from sqlalchemy import create_engine
 
 config = context.config
+config.set_main_option(
+    "sqlalchemy.url",
+    settings.DATABASE_URL.replace("+asyncpg", "")
+)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
@@ -42,9 +48,9 @@ def run_migrations_offline():
 
 def run_migrations_online():
     connectable = create_engine(
-        config.get_main_option("sqlalchemy.url"),
-        poolclass=pool.NullPool,
-    )
+    config.get_main_option("sqlalchemy.url"),
+    poolclass=pool.NullPool,
+)
 
     with connectable.connect() as connection:
         context.configure(
